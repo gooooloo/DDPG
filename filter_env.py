@@ -67,7 +67,9 @@ def makeFilteredEnv(env):
 
     def step(self,action):
 
-      ac_f = np.clip(self.filter_action(action),self.action_space.low,self.action_space.high)
+      action = np.clip(action,self.action_space.low,self.action_space.high)
+      ac_f = self.filter_action(action)
+      ac_f = int(ac_f[0])
 
       obs, reward, term, info = env_type.step(self,ac_f) # super function
 
@@ -77,9 +79,9 @@ def makeFilteredEnv(env):
 
   fenv = FilteredEnv()
 
-  print('True action space: ' + str(acsp.low) + ', ' + str(acsp.high))
-  print('True state space: ' + str(obsp.low) + ', ' + str(obsp.high))
-  print('Filtered action space: ' + str(fenv.action_space.low) + ', ' + str(fenv.action_space.high))
-  print('Filtered state space: ' + str(fenv.observation_space.low) + ', ' + str(fenv.observation_space.high))
+  # print('True action space: ' + str(acsp.low) + ', ' + str(acsp.high))
+  # print('True state space: ' + str(obsp.low) + ', ' + str(obsp.high))
+  # print('Filtered action space: ' + str(fenv.action_space.low) + ', ' + str(fenv.action_space.high))
+  # print('Filtered state space: ' + str(fenv.observation_space.low) + ', ' + str(fenv.observation_space.high))
 
   return fenv

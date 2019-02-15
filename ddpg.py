@@ -13,8 +13,8 @@ from replay_buffer import ReplayBuffer
 
 # Hyper Parameters:
 
-REPLAY_BUFFER_SIZE = 1000000
-REPLAY_START_SIZE = 10000
+REPLAY_BUFFER_SIZE = 10000
+REPLAY_START_SIZE = 100
 BATCH_SIZE = 64
 GAMMA = 0.99
 
@@ -26,7 +26,7 @@ class DDPG:
         self.environment = env
         # Randomly initialize actor network and critic network
         # with both their target networks
-        self.state_dim = env.observation_space.shape[0]
+        self.state_dim = env.observation_space.shape[0] * env.observation_space.shape[1]
         self.action_dim = env.action_space.shape[0]
 
         self.sess = tf.InteractiveSession()
@@ -40,8 +40,11 @@ class DDPG:
         # Initialize a random process the Ornstein-Uhlenbeck process for action exploration
         self.exploration_noise = OUNoise(self.action_dim)
 
+        self.time_step = 0
+
     def train(self):
-        #print "train step",self.time_step
+        print("train step",self.time_step)
+        self.time_step += 1
         # Sample a random minibatch of N transitions from replay buffer
         minibatch = self.replay_buffer.get_batch(BATCH_SIZE)
         state_batch = np.asarray([data[0] for data in minibatch])
